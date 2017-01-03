@@ -55,7 +55,23 @@ class PerceptronClassifier:
             print "Starting iteration ", iteration, "..."
             for i in range(len(trainingData)):
                 "*** YOUR CODE HERE ***"
-                util.raiseNotDefined()
+                #util.raiseNotDefined()
+
+                scores = []
+                for j in self.legalLabels:
+                    scores.append(self.weights[j] * trainingData[i])
+
+
+                bestScore = scores.index(max(scores))
+
+                if bestScore != trainingLabels[i]:
+                    for k in self.legalLabels:
+                        if k == trainingLabels[i]:
+                            self.weights[k] += trainingData[i]
+                        elif  k == bestScore:
+                            self.weights[k] -= trainingData[i]
+
+
 
     def classify(self, data ):
         """
@@ -77,9 +93,9 @@ class PerceptronClassifier:
         """
         Returns a list of the 100 features with the greatest weight for some label
         """
-        featuresWeights = []
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        featuredWeights = []
 
-        return featuresWeights
+        for key, value in sorted(self.weights[label].items, key=lambda x: x[1])[-100:]: featuredWeights.append(key)
+
+        return featuredWeights
