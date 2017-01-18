@@ -55,18 +55,17 @@ class PerceptronClassifier:
             print "Starting iteration ", iteration, "..."
             for i in range(len(trainingData)):
                 "*** YOUR CODE HERE ***"
-                weightVector = util.Counter()                
-                
+                weightVector = util.Counter() 
+
                 for x in self.legalLabels:  				#For all possible labels calculate the activation value
                      weightVector[x] = self.weights[x] * trainingData[i]
-                
+                                
+
                 predictedLabel = weightVector.argMax()			#Predicted label is the highest score of all possible labels
 
                 if not (predictedLabel == trainingLabels[i]):		#Update weights when the predicted label is incorrect
                      self.weights[trainingLabels[i]] += trainingData[i]
                      self.weights[predictedLabel] -= trainingData[i]       
-
-                #util.raiseNotDefined() 
 
 
     def classify(self, data ):
@@ -89,4 +88,5 @@ class PerceptronClassifier:
         """
         Returns a list of the 100 features with the greatest weight for some label
         """
+
         return self.weights[label].sortedKeys()[:100]

@@ -61,7 +61,24 @@ class MiraClassifier:
         representing a vector of values.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+  
+        for c in Cgrid:                     #voor elke C in Cgrid
+            #weights = self.weights.copy() Onnodig kan ook gewoon self.weights aanspreken.               #laad de gewichten in de variabele weights
+            
+            for iteration in range(self.max_iterations):      #voor elke iteratie in de range van de c
+
+                    # de label gokken  en dan zoals in de formule de y gokken?  weet hier de code niet
+                    if gokY == trueY: #doe niks
+            # else "update weight vectors" met (vectorTrue = vectorTrue + rf) en (vectorGok = vectorGok - rf)
+            # dit deel van de theory snap ik nog niet.
+
+
+        #dan moet de accuracy van de c gechecked worden.
+            #als de accuracy dan beter is dan de huidige best gevonden accuracy, update
+            #update tevens weights
+
+            #self.weights = beste Weights
+                        util.raiseNotDefined()
 
     def classify(self, data ):
         """
