@@ -50,4 +50,10 @@ class PerceptronClassifierPacman(PerceptronClassifier):
             print "Starting iteration ", iteration, "..."
             for i in range(len(trainingData)):
                 "*** YOUR CODE HERE ***"
-                util.raiseNotDefined()
+                weightVector = util.Counter()
+                datum = trainingData[i]
+                predictedLabel = self.classify([datum])[0]              #Predicted label
+
+                if not (predictedLabel == trainingLabels[i]):		#Update weights when the predicted label is incorrect
+                     self.weights += datum[0][trainingLabels[i]]
+                     self.weights -= datum[0][predictedLabel]  
