@@ -26,10 +26,10 @@ import util
 from pacman import GameState
 
 TEST_SET_SIZE = 100
-DIGIT_DATUM_WIDTH = 28
-DIGIT_DATUM_HEIGHT = 28
-FACE_DATUM_WIDTH = 60
-FACE_DATUM_HEIGHT = 70
+DIGIT_DATUM_WIDTH=28
+DIGIT_DATUM_HEIGHT=28
+FACE_DATUM_WIDTH=60
+FACE_DATUM_HEIGHT=70
 
 
 def basicFeatureExtractorDigit(datum):
@@ -72,83 +72,17 @@ def enhancedFeatureExtractorDigit(datum):
     for this datum (datum is of type samples.Datum).
 
     ## DESCRIBE YOUR ENHANCED FEATURES HERE...
-    1. Number of white-spaces
-    2. Check if pixles to the sides are enabled/disabled
+
     ##
     """
+    features =  basicFeatureExtractorDigit(datum)
 
-    def depthFirstSearch(x, y):                             #Simple DFS
-        visited.add((x, y))
-        for next_x, next_y in getNeighbours(x, y):
-            if features[(next_x, next_y)] == 1:
-                continue
-            if not (next_x, next_y) in visited:
-                depthFirstSearch(next_x, next_y)
+    "*** YOUR CODE HERE ***"
+    util.raiseNotDefined()
 
-    features = basicFeatureExtractorDigit(datum)            #Get the basic features
-    visited = set()                                         #Empty set to check if pixels are visited
-    numComponents = 0                                       #Number of white spaces
-
-
-    for x in xrange(DIGIT_DATUM_WIDTH):
-        for y in xrange(DIGIT_DATUM_HEIGHT):                #For each pixel in the picture check if it is visited, else check for neighbours
-            if features[(x, y)] == 1 or (x, y) in visited:
-                continue
-            depthFirstSearch(x, y) 
-            numComponents += 1
-    
-    numComponents -= 1
-
-    """
-    Check for the enabled pixes in the pixel and there neighbours
-    """
-    features['numComponentsA'] = numComponents == 0 #Only interested in the white spaces
-    features['numComponentsB'] = numComponents == 1 #Low enough enabled pixel that they are counted as white spaces
-
-
-
-    """
-    ----------------------------------------------------------------------------------------------------------------------------------------------
-    Underneath is the code to get the vertical and horizontal neighbours of the current pixel
-    """
-    lines = 0
-    verticalNeighbour = [features[(i, DIGIT_DATUM_HEIGHT / 2)] for i in range(DIGIT_DATUM_WIDTH)]
-    for i in range(1, len(verticalNeighbour)):
-        if verticalNeighbour[i] == 1 and verticalNeighbour[i - 1] == 0:
-            lines += 1
-    lines = min(lines, 4)
-    
-    features['neighbourVerticalA'] = lines == 1
-    features['neighbourVerticalB'] = lines == 2
-    features['neighbourVerticalC'] = lines == 3
-
-    lines = 0
-    horizontalNeighbour = [features[(DIGIT_DATUM_WIDTH / 2, i)] for i in range(DIGIT_DATUM_HEIGHT)]
-    for i in range(1, len(horizontalNeighbour)):
-        if horizontalNeighbour[i] == 1 and horizontalNeighbour[i - 1] == 0:
-            lines += 1
-    lines = min(lines, 4)
-    
-    features['neighbourHorizontalA'] = lines == 1
-    features['neighbourHorizontalB'] = lines == 2
-    features['neighbourHorizontalC'] = lines == 3
-    
     return features
 
-def inRange(x, y):
-    return 0 <= x < DIGIT_DATUM_WIDTH and 0 <= y < DIGIT_DATUM_HEIGHT
 
-def getNeighbours(x, y):
-    neighBours = []
-    for i in range(-1, 2):
-        for j in range(-1, 2):
-            next_x, next_y = x + i, y + j
-            if i * j != 0:
-                continue
-            if not inRange(next_x, next_y):
-                continue
-            neighBours.append((next_x, next_y))
-    return neighBours
 
 def basicFeatureExtractorPacman(state):
     """
@@ -186,44 +120,11 @@ def enhancedFeatureExtractorPacman(state):
 def enhancedPacmanFeatures(state, action):
     """
     For each state, this function is called with each legal action.
-    It should return a counter with { <closestFood> : <closestGhost>, <closestCapsule> }
+    It should return a counter with { <feature name> : <feature value>, ... }
     """
     features = util.Counter()
     "*** YOUR CODE HERE ***"
-    successor = state.generateSuccessor(0, action)                          #Generate successor
-    pacmanPosition = successor.getPacmanPosition()                          #The posistion where pacman is at
-    successor_pacman_position = successor.getPacmanPosition()
- 
-    foodPositions = state.getFood().asList()                                #List of food positions
-    if foodPositions:                                                       #If there's food left
-        foodDistance = []                                                   #List of food distances
-        for location in foodPositions:                                      #Calculate for every food position the
-                                                                            #Manhattan Distance and add to list
-            closestFood = util.manhattanDistance(pacmanPosition, location)
-            foodDistance.append(closestFood)
-    features['closestFood'] = min(foodDistance)                             #Feature: Closest food (minimum number on the food
-                                                                            #distance list)
- 
-    ghostPositions = state.getGhostPositions()                              #Positions of the ghosts
-    if ghostPositions:                                                      #If there is a ghost
-        ghostDistance = []                                                  #List of ghost distances
-        for location in ghostPositions:                                     #Calculate for every ghost position the
-                                                                            #Manhattan Distance and add to list
-            closestGhost = util.manhattanDistance(pacmanPosition, location)
-            ghostDistance.append(closestGhost)
-    features['closestGhost'] = min(ghostDistance)                           #Feature: Closest ghost (minimum number on the ghost
-                                                                            #distance list)
-     
-    capsulePositions = successor.getCapsules()                              #Positions of the capsules
-    if capsulePositions:                                                    #If there is a capsule
-        capsuleDistance = []                                                #List of capsule distances
-        for location in capsulePositions:                                   #Calculate for every capsule position the
-                                                                            #Manhattan Distance and add to list
-           closestCapsule = util.manhattanDistance(location, pacmanPosition)
-           capsuleDistance.append(closestCapsule)
-        features['closestCapsule'] = min(capsuleDistance)                   #Feature: Closest capsule (minimum number on the capsule
-                                                                            #distance list)
- 
+    util.raiseNotDefined()
     return features
 
 
@@ -231,7 +132,7 @@ def contestFeatureExtractorDigit(datum):
     """
     Specify features to use for the minicontest
     """
-    features = basicFeatureExtractorDigit(datum)
+    features =  basicFeatureExtractorDigit(datum)
     return features
 
 def enhancedFeatureExtractorFace(datum):
@@ -239,7 +140,7 @@ def enhancedFeatureExtractorFace(datum):
     Your feature extraction playground for faces.
     It is your choice to modify this.
     """
-    features = basicFeatureExtractorFace(datum)
+    features =  basicFeatureExtractorFace(datum)
     return features
 
 def analysis(classifier, guesses, testLabels, testData, rawTestData, printImage):
@@ -280,6 +181,7 @@ def analysis(classifier, guesses, testLabels, testData, rawTestData, printImage)
 ## =====================
 ## You don't have to modify any code below.
 ## =====================
+
 
 class ImagePrinter:
     def __init__(self, width, height):
@@ -327,7 +229,7 @@ USAGE_STRING = """
                  """
 
 
-def readCommand(argv):
+def readCommand( argv ):
     "Processes the command used to run from the command line."
     from optparse import OptionParser
     parser = OptionParser(USAGE_STRING)
@@ -360,7 +262,7 @@ def readCommand(argv):
     else:
         print "using minicontest feature extractor"
     print "training set size:\t" + str(options.training)
-    if(options.data == "digits"):
+    if(options.data=="digits"):
         printImage = ImagePrinter(DIGIT_DATUM_WIDTH, DIGIT_DATUM_HEIGHT).printImage
         if (options.features):
             featureFunction = enhancedFeatureExtractorDigit
@@ -368,13 +270,13 @@ def readCommand(argv):
             featureFunction = basicFeatureExtractorDigit
         if (options.classifier == 'minicontest'):
             featureFunction = contestFeatureExtractorDigit
-    elif(options.data == "faces"):
+    elif(options.data=="faces"):
         printImage = ImagePrinter(FACE_DATUM_WIDTH, FACE_DATUM_HEIGHT).printImage
         if (options.features):
             featureFunction = enhancedFeatureExtractorFace
         else:
             featureFunction = basicFeatureExtractorFace
-    elif(options.data == "pacman"):
+    elif(options.data=="pacman"):
         printImage = None
         if (options.features):
             featureFunction = enhancedFeatureExtractorPacman
@@ -385,7 +287,7 @@ def readCommand(argv):
         print USAGE_STRING
         sys.exit(2)
 
-    if(options.data == "digits"):
+    if(options.data=="digits"):
         legalLabels = range(10)
     else:
         legalLabels = ['Stop', 'West', 'East', 'North', 'South']
@@ -415,7 +317,7 @@ def readCommand(argv):
             print "using automatic tuning for naivebayes"
             classifier.automaticTuning = True
         else:
-            print "using smoothing parameter k=%f for naivebayes" % options.smoothing
+            print "using smoothing parameter k=%f for naivebayes" %  options.smoothing
     elif(options.classifier == "perceptron"):
         if options.data != 'pacman':
             classifier = perceptron.PerceptronClassifier(legalLabels,options.iterations)
@@ -446,16 +348,16 @@ def readCommand(argv):
 
     return args, options
 
-# Dictionary containing full path to .pkl file that contains the agent's
-# training, validation, and testing data.
+# Dictionary containing full path to .pkl file that contains the agent's training, validation, and testing data.
 MAP_AGENT_TO_PATH_OF_SAVED_GAMES = {
-    'FoodAgent': ('pacmandata/food_training.pkl','pacmandata/food_validation.pkl','pacmandata/food_test.pkl'),
-    'StopAgent': ('pacmandata/stop_training.pkl','pacmandata/stop_validation.pkl','pacmandata/stop_test.pkl'),
-    'SuicideAgent': ('pacmandata/suicide_training.pkl','pacmandata/suicide_validation.pkl','pacmandata/suicide_test.pkl'),
-    'GoodReflexAgent': ('pacmandata/good_reflex_training.pkl','pacmandata/good_reflex_validation.pkl','pacmandata/good_reflex_test.pkl'),
-    'ContestAgent': ('pacmandata/contest_training.pkl','pacmandata/contest_validation.pkl', 'pacmandata/contest_test.pkl')
+    'FoodAgent': ('pacmandata/food_training.pkl','pacmandata/food_validation.pkl','pacmandata/food_test.pkl' ),
+    'StopAgent': ('pacmandata/stop_training.pkl','pacmandata/stop_validation.pkl','pacmandata/stop_test.pkl' ),
+    'SuicideAgent': ('pacmandata/suicide_training.pkl','pacmandata/suicide_validation.pkl','pacmandata/suicide_test.pkl' ),
+    'GoodReflexAgent': ('pacmandata/good_reflex_training.pkl','pacmandata/good_reflex_validation.pkl','pacmandata/good_reflex_test.pkl' ),
+    'ContestAgent': ('pacmandata/contest_training.pkl','pacmandata/contest_validation.pkl', 'pacmandata/contest_test.pkl' )
 }
 # Main harness code
+
 
 
 def runClassifier(args, options):
@@ -467,7 +369,7 @@ def runClassifier(args, options):
     numTraining = options.training
     numTest = options.test
 
-    if(options.data == "pacman"):
+    if(options.data=="pacman"):
         agentToClone = args.get('agentToClone', None)
         trainingData, validationData, testData = MAP_AGENT_TO_PATH_OF_SAVED_GAMES.get(agentToClone, (None, None, None))
         trainingData = trainingData or args.get('trainingData', False) or MAP_AGENT_TO_PATH_OF_SAVED_GAMES['ContestAgent'][0]
@@ -505,7 +407,7 @@ def runClassifier(args, options):
     analysis(classifier, guesses, testLabels, testData, rawTestData, printImage)
 
     # do odds ratio computation if specified at command line
-    if((options.odds) & (options.classifier == "naiveBayes" or (options.classifier == "nb"))):
+    if((options.odds) & (options.classifier == "naiveBayes" or (options.classifier == "nb")) ):
         label1, label2 = options.label1, options.label2
         features_odds = classifier.findHighOddsFeatures(label1,label2)
         if(options.classifier == "naiveBayes" or options.classifier == "nb"):
@@ -519,11 +421,11 @@ def runClassifier(args, options):
     if((options.weights) & (options.classifier == "perceptron")):
         for l in classifier.legalLabels:
             features_weights = classifier.findHighWeightFeatures(l)
-            print ("=== Features with high weight for label %d ===" % l)
+            print ("=== Features with high weight for label %d ==="%l)
             printImage(features_weights)
 
 if __name__ == '__main__':
     # Read input
-    args, options = readCommand(sys.argv[1:])
+    args, options = readCommand( sys.argv[1:] )
     # Run classifier
     runClassifier(args, options)
