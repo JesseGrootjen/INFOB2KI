@@ -61,24 +61,31 @@ class MiraClassifier:
         representing a vector of values.
         """
         "*** YOUR CODE HERE ***"
-  
-        for c in Cgrid:                     #voor elke C in Cgrid
-            #weights = self.weights.copy() Onnodig kan ook gewoon self.weights aanspreken.               #laad de gewichten in de variabele weights
-            
-            for iteration in range(self.max_iterations):      #voor elke iteratie in de range van de c
+        for c in Cgrid:
+            for iteration in range(self.max_iterations):                    #code geleend van Q1
+                for i, datum in enumerate(trainingData):
+                
+                    weightVector = util.Counter() 
 
-                    # de label gokken  en dan zoals in de formule de y gokken?  weet hier de code niet
-                    if gokY == trueY: #doe niks
-            # else "update weight vectors" met (vectorTrue = vectorTrue + rf) en (vectorGok = vectorGok - rf)
-            # dit deel van de theory snap ik nog niet.
+                    for x in self.legalLabels:  				#For all possible labels calculate the activation value
+                        weightVector[x] = self.weights[x] * trainingData[i]
+                                    
+
+                    predictedLabel = weightVector.argMax()			#Predicted label is the highest score of all possible labels
+
+                    if not (predictedLabel == trainingLabels[i]):		#Update weights when the predicted label is incorrect
+                                                                                #Limit the update by Using TF
+                        tf = datum.copy()
+                        t = min(c, ((self.weights[predictedLabel] - self.weights[trainingLabels[i]]) * tf + 1.0) / (2.0 * (tf * tf)))   
+                        
+                        tf.divideAll(1.0 / t)
+
+                        self.weights[trainingLabels[i]] += tf
+                        self.weights[predictedLabel] -= tf       
 
 
-        #dan moet de accuracy van de c gechecked worden.
-            #als de accuracy dan beter is dan de huidige best gevonden accuracy, update
-            #update tevens weights
-
-            #self.weights = beste Weights
-                        util.raiseNotDefined()
+                    
+        
 
     def classify(self, data ):
         """
