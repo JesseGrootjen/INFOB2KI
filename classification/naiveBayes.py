@@ -155,7 +155,6 @@ class NaiveBayesClassifier(classificationMethod.ClassificationMethod):
                     logJoint[label] += math.log(self.conditionalProb[feat,label])
                 else:
                     logJoint[label] += math.log(1-self.conditionalProb[feat,label])
-
         return logJoint
 
     def findHighOddsFeatures(self, label1, label2):
@@ -171,5 +170,4 @@ class NaiveBayesClassifier(classificationMethod.ClassificationMethod):
             featuresOdds.append((self.conditionalProb[feat, label1]/self.conditionalProb[feat, label2], feat))
         featuresOdds.sort()
         featuresOdds = [feat for val, feat in featuresOdds[-100:]]
-
         return featuresOdds

@@ -61,8 +61,8 @@ class MiraClassifier:
         representing a vector of values.
         """
         "*** YOUR CODE HERE ***"
-        for c in Cgrid:
-            for iteration in range(self.max_iterations):                    #code geleend van Q1
+        for c in Cgrid:                                                         #try for every C provided so --autotune works
+            for iteration in range(self.max_iterations):                        
                 for i, datum in enumerate(trainingData):
                 
                     weightVector = util.Counter() 
@@ -74,14 +74,15 @@ class MiraClassifier:
                     predictedLabel = weightVector.argMax()			#Predicted label is the highest score of all possible labels
 
                     if not (predictedLabel == trainingLabels[i]):		#Update weights when the predicted label is incorrect
-                                                                                #Limit the update by Using TF
+                                                                                #Limit the update of weights by using the formula provided in the assignment
+                        t = min(c, ((self.weights[predictedLabel] - self.weights[trainingLabels[i]]) * datum + 1.0) / (2.0 * (datum * datum)))   
+                                                                                #creation of variable tf is necessary to save the outcome after the last division
                         tf = datum.copy()
-                        t = min(c, ((self.weights[predictedLabel] - self.weights[trainingLabels[i]]) * tf + 1.0) / (2.0 * (tf * tf)))   
-                        
                         tf.divideAll(1.0 / t)
-
+                                                                                #update the weights with the outcome of the formula instead of trainingData[i]
                         self.weights[trainingLabels[i]] += tf
-                        self.weights[predictedLabel] -= tf       
+                        self.weights[predictedLabel] -= tf
+                        
 
 
                     
@@ -103,3 +104,9 @@ class MiraClassifier:
         return guesses
 
 
+    def findHighWeightFeatures(self, label):        #Find the highest 100 weights per label.
+        """
+        Returns a list of the 100 features with the greatest weight for some label
+        """
+
+        return self.weights[label].sortedKeys()[:100]

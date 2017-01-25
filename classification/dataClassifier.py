@@ -76,7 +76,6 @@ def enhancedFeatureExtractorDigit(datum):
     2. Check if pixles to the sides are enabled/disabled
     ##
     """
-
     def depthFirstSearch(x, y):                             #Simple DFS
         visited.add((x, y))
         for next_x, next_y in getNeighbours(x, y):
@@ -111,23 +110,32 @@ def enhancedFeatureExtractorDigit(datum):
     ----------------------------------------------------------------------------------------------------------------------------------------------
     Underneath is the code to get the vertical and horizontal neighbours of the current pixel
     """
+    verticalNeighbour = []
+    horizontalNeighbour = []
+
+    
+    for x in range(DIGIT_DATUM_HEIGHT):                                 #Get horizontal neighbours
+            horizontalNeighbour = [features[(y, DIGIT_DATUM_WIDTH)]]
+    
+            
+    for y in range(DIGIT_DATUM_WIDTH):                                  #Get vertical neighbours
+        verticalNeighbour = [features[(y, DIGIT_DATUM_HEIGHT)]]
+
     lines = 0
-    verticalNeighbour = [features[(i, DIGIT_DATUM_HEIGHT / 2)] for i in range(DIGIT_DATUM_WIDTH)]
     for i in range(1, len(verticalNeighbour)):
         if verticalNeighbour[i] == 1 and verticalNeighbour[i - 1] == 0:
             lines += 1
-    lines = min(lines, 4)
+    lines = min(lines, 3)
     
     features['neighbourVerticalA'] = lines == 1
     features['neighbourVerticalB'] = lines == 2
     features['neighbourVerticalC'] = lines == 3
 
     lines = 0
-    horizontalNeighbour = [features[(DIGIT_DATUM_WIDTH / 2, i)] for i in range(DIGIT_DATUM_HEIGHT)]
     for i in range(1, len(horizontalNeighbour)):
         if horizontalNeighbour[i] == 1 and horizontalNeighbour[i - 1] == 0:
             lines += 1
-    lines = min(lines, 4)
+    lines = min(lines, 3)
     
     features['neighbourHorizontalA'] = lines == 1
     features['neighbourHorizontalB'] = lines == 2
@@ -516,7 +524,7 @@ def runClassifier(args, options):
         print string3
         printImage(features_odds)
 
-    if((options.weights) & (options.classifier == "perceptron")):
+    if((options.weights) & ((options.classifier == "perceptron") or (options.classifier == "mira"))):
         for l in classifier.legalLabels:
             features_weights = classifier.findHighWeightFeatures(l)
             print ("=== Features with high weight for label %d ===" % l)
